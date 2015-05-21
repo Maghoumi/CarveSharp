@@ -1,0 +1,459 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeFullToolkit</name>
+    </assembly>
+    <members>
+        <member name="T:CodeFull.Controls.GLViewport3D">
+            <summary>
+            A viewport control is able to render and manipulate triangular meshes in OpenGL.
+            This control tries to mimic the functionality of WPF's Viewport3D control.
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.GLViewport3D.arcball">
+            <summary>
+            The arcball instance that controls the transformations of the meshes
+            inside this viewport
+            </summary>
+        </member>
+        <member name="M:CodeFull.Controls.GLViewport3D.HitTest(System.Collections.Generic.IEnumerable{System.Drawing.Point})">
+            <summary>
+            Performs a hit test on all the children of this viewport and
+            returns a set of hit points (mesh triangle coordinates)
+            </summary>
+            <param name="points">A collection of points to use in hit testing</param>
+            <returns>A set of triangle coordinates that intersect with the ray</returns>
+        </member>
+        <member name="M:CodeFull.Controls.GLViewport3D.HitTest(System.Collections.Generic.IEnumerable{System.Drawing.Point},CodeFull.Graphics.Mesh)">
+            <summary>
+            Performs a hit test on the specified child and returns the result
+            </summary>
+            <param name="points">A collection of points to use in hit testing</param>
+            <param name="mesh">The mesh to perform hit test on</param>
+            <returns>The hit test result</returns>
+        </member>
+        <member name="M:CodeFull.Controls.GLViewport3D.GetOpenGLMouseCoordinates(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Converts the mouse cursor location to OpenGL window coordinate system
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.CameraPosition">
+            <summary>
+            The position of the camera in this viewport
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.CameraLookAt">
+            <summary>
+            The point that the camera must look at
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.CameraUp">
+            <summary>
+            The up vector of the camera (default = (0, 1, 0))
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.FieldOfView">
+            <summary>
+            Gets or sets the camera's field of view (default value = 45)
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.ArcballSensitivity">
+            <summary>
+            Gets or sets the arcball sensitivity for manipulating meshes in this viewport
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.NearClipping">
+            <summary>
+            Camera's near clipping distance (default = 0.1)
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.FarClipping">
+            <summary>
+            Camera's far clipping distance (default = 64)
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.ClearColor">
+            <summary>
+            The clear color used as the background of this OpenGL control
+            (Defaults to white)
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.Meshes">
+            <summary>
+            The meshes that this viewport will display
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.GLViewport3D.SelectedMesh">
+            <summary>
+            The currently selected mesh of this viewport. This mesh will 
+            be manipulated
+            </summary>
+        </member>
+        <member name="E:CodeFull.Controls.GLViewport3D.SelectionChanged">
+            <summary>
+            Event raised when the selected mesh item has changed
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.mousePosition">
+            <summary>
+            The last set mouse cursor position
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.clickStartVector">
+            <summary>
+            Start of the click vector (mapped to the sphere)
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.clickEndVector">
+            <summary>
+            End of the click vector (mapped to the sphere)
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.adjustedWidth">
+            <summary>
+            Adjusted mouse bounds width
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.adjustedHeight">
+            <summary>
+            Adjusted mouse bounds height
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.height">
+            <summary>
+            The height of the OpenGL canvas
+            </summary>
+        </member>
+        <member name="F:CodeFull.Controls.Arcball.buttonMapping">
+            <summary>
+            A mapping of the mouse button to their pressed status
+            </summary>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.#ctor(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Instantiates a new Arcball with the specified boundaries
+            for the width and height
+            </summary>
+            <param name="width">The width</param>
+            <param name="height">The height</param>
+            <param name="sensitivity">The sensitivity of the trackball</param>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.MapToSphere(System.Drawing.Point)">
+            <summary>
+            Maps the given point to the sphere and returns the resulting vector
+            </summary>
+            <param name="point">The point to map to sphere</param>
+            <returns>The vector of the mapped point</returns>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.SetBounds(System.Int32,System.Int32)">
+            <summary>
+            Set the boundaries of the mouse click
+            </summary>
+            <param name="width">The width boundary</param>
+            <param name="height">The height boundary</param>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.SetMouseButtonStatus(System.Windows.Forms.MouseButtons,System.Boolean)">
+            <summary>
+            Sets the pressed status of the specified mouse button
+            </summary>
+            <param name="button">The mouse button to set</param>
+            <param name="isPressed">The pressed status of that button</param>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.SetMousePosition(System.Drawing.Point)">
+            <summary>
+            Sets the start position of the mouse
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.GetRotation(System.Drawing.Point)">
+            <summary>
+            Calculate the rotation for the current point
+            </summary>
+            <param name="currentPoint"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeFull.Controls.Arcball.ApplyTransforms(System.Drawing.Point)">
+            <summary>
+            Applies all the transformations possible based on the current status of mouse buttons
+            </summary>
+            <param name="currentCursorPosition">The current position of the mouse cursor</param>
+        </member>
+        <member name="P:CodeFull.Controls.Arcball.Sensitivity">
+            <summary>
+            The sensitivity of this arcball (default is 0.01)
+            </summary>
+        </member>
+        <member name="P:CodeFull.Controls.Arcball.Mesh">
+            <summary>
+            The mesh that this arcball instance performs on
+            </summary>
+        </member>
+        <member name="T:CodeFull.Graphics.Mesh">
+            <summary>
+            Represents a mesh built using vertices and triangle indices that can be
+            rendered in OpenGL, manipulated in C# and be the subject of CSG operations
+            in Carve
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.idGen">
+            <summary>
+            Internal ID counter for meshes
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.vertices">
+            <summary>
+            The vertices of this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.colors">
+            <summary>
+            The color array of this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.selectColors">
+            <summary>
+            The ID of each triangle in terms of colors (hack for picking)
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.revLookup">
+            <summary>
+            A lookup table for mapping face ID to triangle vertices
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.triangleIndices">
+            <summary>
+            The triangle indices of this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.handle">
+            <summary>
+            The OpenGL handles
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.center">
+            <summary>
+            Internally stores the centroid of this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.translation">
+            <summary>
+            The translation applied to this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.rotation">
+            <summary>
+            The rotation applied to this mesh
+            </summary>
+        </member>
+        <member name="F:CodeFull.Graphics.Mesh.scale">
+            <summary>
+            The scale applied to this mesh
+            </summary>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.SetTransform(OpenTK.Matrix4d)">
+            <summary>
+            Set an arbitrary transform for this mesh in the form of a Matrix4d
+            </summary>
+            <param name="transform">The transform to set</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.TransformBy(OpenTK.Matrix4d)">
+            <summary>
+            Relatively transform this mesh by the specified transformation
+            matrix
+            </summary>
+            <param name="transform">The transform to apply</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.SetTranslation(System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the translation of this mesh to the specified offsets
+            </summary>
+            <param name="offsetX">The X offset</param>
+            <param name="offsetY">The Y offset</param>
+            <param name="offsetZ">The Z offset</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.SetRotation(System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the rotation of this mesh to the specified angles
+            </summary>
+            <param name="angleX">The X angle</param>
+            <param name="angleY">The Y angle</param>
+            <param name="angleZ">The Z angle</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.SetScale(System.Double,System.Double,System.Double)">
+            <summary>
+            Sets the scale of this mesh to the specified amounts
+            </summary>
+            <param name="scaleX">The X scale</param>
+            <param name="scaleY">The Y scale</param>
+            <param name="scaleZ">The Z scale</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.TranslateBy(System.Double,System.Double,System.Double)">
+            <summary>
+            Relatively transform this mesh by the specified offsets
+            </summary>
+            <param name="offsetX">The X offset</param>
+            <param name="offsetY">The Y offset</param>
+            <param name="offsetZ">The Z offset</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.RotateBy(System.Double,System.Double,System.Double)">
+            <summary>
+            Relatively rotates this mesh by the specified angle
+            </summary>
+            <param name="angleX">The X angle</param>
+            <param name="angleY">The Y angle</param>
+            <param name="angleZ">The Z angle</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.ScaleBy(System.Double,System.Double,System.Double)">
+            <summary>
+            Relatively scales this mesh by the specified amounts
+            </summary>
+            <param name="scaleX">The X scale</param>
+            <param name="scaleY">The Y scale</param>
+            <param name="scaleZ">The Z scale</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.#ctor(OpenTK.Vector3d[],System.Int32[],System.UInt32[])">
+            <summary>
+            Initializes a new mesh.
+            </summary>
+            <param name="vertices">The vertex coordinates of this mesh</param>
+            <param name="triangleIndices">The face triangle indices of this mesh</param>
+            <param name="colors">Vertex colors of this mesh</param>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.CalculateCenter">
+            <summary>
+            Calculates the center point of this mesh
+            </summary>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.Init">
+            <summary>
+            Registers the handles VBO of this mesh with OpenGL and initializes the data.
+            </summary>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.Draw">
+            <summary>
+            Draws the mesh using OpenGL. The method must be called in a drawing context (after setting
+            the view properties and performing clearing)
+            </summary>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.HitTest(System.Collections.Generic.IEnumerable{System.Drawing.Point})">
+            <summary>
+            Performs a ray casting hit test using the specified points. The points 
+            must be specified in OpenGL window coordinate system. (Bottom left is the origin)
+            </summary>
+            <param name="hitPoints">The points to perform hittest for</param>
+            <returns>A set containing the vertices that form the triangle that the intersects with the points</returns>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.GetIntersectionDistance(System.Drawing.Point)">
+            <summary>
+            Determines whether the specified screen point lies on the mesh. If so, the distance will
+            be returned. If not, null will be returned.
+            </summary>
+            <param name="screenPoint">The point on the screen (in OpenGL window coordinates)</param>
+            <returns>The dept of the hit if the point lies on the mesh, null otherwise</returns>
+        </member>
+        <member name="M:CodeFull.Graphics.Mesh.LoadFromPLYFile(System.String)">
+            <summary>
+            Creates a mesh by parsing a PLY file
+            </summary>
+            <param name="path">The path to the PLY mesh file</param>
+            <returns>A mesh corresponding to the information in the PLY file</returns>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Vertices">
+            <summary>
+            Gets the array of vertices of this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Colors">
+            <summary>
+            Gets the array of colors of this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.TriangleIndices">
+            <summary>
+            Gets the array of triangle indices of this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Center">
+            <summary>
+            Gets the center point of this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Translation">
+            <summary>
+            Gets or sets the translation matrix applied to this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.ID">
+            <summary>
+            An arbitrary ID string associated with this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Rotation">
+            <summary>
+            Gets or sets the rotation matrix applied to this mesh
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.Mesh.Scale">
+            <summary>
+            Gets or sets the scale matrix applied to this mesh
+            </summary>
+        </member>
+        <member name="T:CodeFull.Graphics.HitTestResult">
+            <summary>
+            Represents the result of a hit test performed on a mesh
+            </summary>
+        </member>
+        <member name="M:CodeFull.Graphics.HitTestResult.#ctor(CodeFull.Graphics.Mesh,System.Collections.Generic.HashSet{OpenTK.Vector3d},System.Double)">
+            <summary>
+            Initializes a new instance of this class
+            </summary>
+            <param name="mesh">The mesh that was hit</param>
+            <param name="hitPoints">The hit points</param>
+            <param name="zDistance">The depth of the hit</param>
+        </member>
+        <member name="M:CodeFull.Graphics.HitTestResult.GetEnumerator">
+            <summary>
+            The iterator used for foreach
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CodeFull.Graphics.HitTestResult.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            The iterator used for foreach
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CodeFull.Graphics.HitTestResult.Mesh">
+            <summary>
+            The mesh that was hit by the ray
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.HitTestResult.HitPoints">
+            <summary>
+            A set of triangle vertices that intersect the ray
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.HitTestResult.ZDistance">
+            <summary>
+            The z-Depth of the hit
+            </summary>
+        </member>
+        <member name="P:CodeFull.Graphics.HitTestResult.Count">
+            <summary>
+            The number of the hits that occurred
+            </summary>
+        </member>
+        <member name="T:CodeFull.Graphics.MeshVertex">
+            <summary>
+            Represents the structure of mesh vertices that can be drawn using OpenGL
+            </summary>
+        </member>
+        <member name="T:CodeFull.Graphics.Vbo">
+            <summary>
+            Represents the required VBO handles
+            </summary>
+        </member>
+    </members>
+</doc>

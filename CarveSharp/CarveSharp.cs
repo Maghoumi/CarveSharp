@@ -19,9 +19,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using CodeFull.Graphics;
+using OpenTK;
 
 namespace CodeFull.CarveSharp
 {
+    /// <summary>
+    /// Contains the methods for performing CSG operations using Carve
+    /// </summary>
     public static class CarveSharp
     {
         /// <summary>
@@ -44,10 +49,25 @@ namespace CodeFull.CarveSharp
         /// </summary>
         private unsafe struct InteropMesh
         {
+            /// <summary>
+            /// The array containing the vertices
+            /// </summary>
             public double* vertices;
+
+            /// <summary>
+            /// The array containing the triangle indices
+            /// </summary>
             public int* triangleIndices;
-            public int numVertices;
-            public int numTriangles;
+
+            /// <summary>
+            /// The number of elements in the vertices array
+            /// </summary>
+            public int vertsArrayLength;
+
+            /// <summary>
+            /// The number of elements in the triangle array
+            /// </summary>
+            public int triArrayLength;
         }
 
         /// <summary>
@@ -74,9 +94,9 @@ namespace CodeFull.CarveSharp
         /// <param name="second">The second mesh</param>
         /// <param name="operation">The mesh opration to perform on the two meshes</param>
         /// <returns>A triangular mesh resulting from performing the specified operation</returns>
-        public static TriangularMesh PerformCSG(TriangularMesh first, TriangularMesh second, CSGOperations operation)
+        public static Mesh PerformCSG(Mesh first, Mesh second, CSGOperations operation)
         {
-            TriangularMesh finalResult = new TriangularMesh();
+            Mesh finalResult = null;
 
             unsafe
             {
@@ -85,18 +105,18 @@ namespace CodeFull.CarveSharp
 
                 InteropMesh* result;
 
-                fixed (double* aVerts = &first.vertices.ToArray()[0], bVerts = &second.vertices.ToArray()[0])
+                fixed (Vector3d* aVerts = &first.GetTransformedVertices()[0], bVerts = &second.GetTransformedVertices()[0])
                 {
-                    fixed (int* aTris = &first.triangleIndices.ToArray()[0], bTris = &second.triangleIndices.ToArray()[0])
+                    fixed (int* aTris = &first.TriangleIndices[0], bTris = &second.TriangleIndices[0])
                     {
-                        a.numVertices = first.vertices.Count;
-                        a.numTriangles = first.triangleIndices.Count;
-                        a.vertices = aVerts;
+                        a.vertsArrayLength = first.Vertices.Length * 3;
+                        a.triArrayLength = first.TriangleIndices.Length;
+                        a.vertices = (double*)aVerts;
                         a.triangleIndices = aTris;
 
-                        b.numVertices = second.vertices.Count;
-                        b.numTriangles = second.triangleIndices.Count;
-                        b.vertices = bVerts;
+                        b.vertsArrayLength = second.Vertices.Length * 3;
+                        b.triArrayLength = second.TriangleIndices.Length;
+                        b.vertices = (double*)bVerts;
                         b.triangleIndices = bTris;
 
                         try
@@ -106,80 +126,27 @@ namespace CodeFull.CarveSharp
                         catch (SEHException ex)
                         {
                             ArgumentException e = new ArgumentException("Carve has thrown an error. Possible reason is corrupt or self-intersecting meshes", ex);
-                            throw ex;
+                            throw e;
                         }
                     }
                 }
 
-                // TODO use parallel copy?
-                for (int i = 0; i < result->numVertices; i++)
-                    finalResult.AddVertex(result->vertices[i]);
+                Vector3d[] vertices = new Vector3d[result->vertsArrayLength / 3];
+                int[] triangleIndices = new int[result->triArrayLength];
 
-                for (int i = 0; i < result->numTriangles; i++)
-                    finalResult.AddTriangleIndex(result->triangleIndices[i]);
+                // TODO use parallel copy?
+                for (int i = 0; i < vertices.Length; i++)
+                    vertices[i] = new Vector3d(result->vertices[3*i], result->vertices[3*i+1], result->vertices[3*i+2]);
+
+                for (int i = 0; i < result->triArrayLength; i++)
+                    triangleIndices[i] = result->triangleIndices[i];
+
+                finalResult = new Mesh(vertices, triangleIndices);
 
                 freeMesh(result);
             }   // end-unsafe
 
             return finalResult;
-        }
-    }
-
-    /// <summary>
-    /// Defines a simple representation for a triangular mesh.
-    /// A triangular mesh can be represented using the vertices
-    /// and its triangle indices.
-    /// </summary>
-    public class TriangularMesh
-    {
-        /// <summary>
-        /// Flattened array of vertices. Every 3 elements denote (x, y, z) point
-        /// </summary>
-        public List<double> vertices = new List<double>();
-
-        /// <summary>
-        /// Array of triangle indices
-        /// </summary>
-        public List<int> triangleIndices = new List<int>();
-
-        /// <summary>
-        /// Gets the number of elements in the flattened vertex array
-        /// </summary>
-        public int NumVertices
-        {
-            get
-            {
-                return vertices.Count;
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of elements in the array of triange indices
-        /// </summary>
-        public int NumTriangleIndices
-        {
-            get
-            {
-                return triangleIndices.Count;
-            }
-        }
-
-        /// <summary>
-        /// Add a vertex to the end of flattened array of vertices
-        /// </summary>
-        /// <param name="vertex">The vertex to add</param>
-        public void AddVertex(double vertex)
-        {
-            this.vertices.Add(vertex);
-        }
-
-        /// <summary>
-        /// Add an index to the end of the triangle indices array
-        /// </summary>
-        /// <param name="index">The index to add</param>
-        public void AddTriangleIndex(int index)
-        {
-            this.triangleIndices.Add(index);
         }
     }
 }
