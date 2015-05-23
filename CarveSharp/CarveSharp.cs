@@ -93,7 +93,7 @@ namespace CodeFull.CarveSharp
         /// <param name="first">The first mesh</param>
         /// <param name="second">The second mesh</param>
         /// <param name="operation">The mesh opration to perform on the two meshes</param>
-        /// <returns>A triangular mesh resulting from performing the specified operation</returns>
+        /// <returns>A triangular mesh resulting from performing the specified operation. If the resulting mesh is empty, will return null.</returns>
         public static Mesh PerformCSG(Mesh first, Mesh second, CSGOperations operation)
         {
             Mesh finalResult = null;
@@ -129,6 +129,12 @@ namespace CodeFull.CarveSharp
                             throw e;
                         }
                     }
+                }
+
+                if (result->vertsArrayLength == 0)
+                {
+                    freeMesh(result);
+                    return null;
                 }
 
                 Vector3d[] vertices = new Vector3d[result->vertsArrayLength / 3];

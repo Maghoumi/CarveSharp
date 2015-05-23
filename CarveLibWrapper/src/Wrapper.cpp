@@ -112,14 +112,23 @@ InteropMesh* performCSG(InteropMesh* a, InteropMesh* b, Operation op) {
 	CSG csg;
 
 	MeshSet<3> *result = csg.compute(first, second, (CSG::OP)op);
-	
-	InteropMesh* meshResult = new InteropMesh;
-
-	setVertexProperties(meshResult, result);
-	setTriangleProperties(meshResult, result);
 
 	delete first;
 	delete second;
+
+	InteropMesh* meshResult = new InteropMesh;
+
+	if (result->vertex_storage.size() != 0) {
+		setVertexProperties(meshResult, result);
+		setTriangleProperties(meshResult, result);
+	}
+	else {
+		meshResult->vertices = NULL;
+		meshResult->triangleIndices = NULL;
+		meshResult->numVertices = 0;
+		meshResult->numTriangles = 0;
+	}
+
 	delete result;
 
 	return meshResult;

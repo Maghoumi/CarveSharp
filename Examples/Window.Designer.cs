@@ -29,12 +29,13 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnCut = new System.Windows.Forms.Button();
             this.lblHelp = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.lstMeshes = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.viewport = new CodeFull.Controls.GLViewport3D();
-            this.btnCut = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -43,6 +44,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnSave);
             this.groupBox1.Controls.Add(this.btnCut);
             this.groupBox1.Controls.Add(this.lblHelp);
             this.groupBox1.Controls.Add(this.button1);
@@ -53,6 +55,26 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Controls";
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(6, 162);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(103, 23);
+            this.btnSave.TabIndex = 4;
+            this.btnSave.Text = "Save mesh";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnCut
+            // 
+            this.btnCut.Location = new System.Drawing.Point(6, 191);
+            this.btnCut.Name = "btnCut";
+            this.btnCut.Size = new System.Drawing.Size(103, 23);
+            this.btnCut.TabIndex = 3;
+            this.btnCut.Text = "A - B";
+            this.btnCut.UseVisualStyleBackColor = true;
+            this.btnCut.Click += new System.EventHandler(this.btnCut_Click);
             // 
             // lblHelp
             // 
@@ -113,16 +135,6 @@
             this.viewport.VSync = false;
             this.viewport.SelectionChanged += new System.EventHandler(this.viewport_SelectionChanged);
             // 
-            // btnCut
-            // 
-            this.btnCut.Location = new System.Drawing.Point(6, 162);
-            this.btnCut.Name = "btnCut";
-            this.btnCut.Size = new System.Drawing.Size(103, 23);
-            this.btnCut.TabIndex = 3;
-            this.btnCut.Text = "Cut 1st using 2nd";
-            this.btnCut.UseVisualStyleBackColor = true;
-            this.btnCut.Click += new System.EventHandler(this.btnCut_Click);
-            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -148,6 +160,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lblHelp;
         private System.Windows.Forms.Button btnCut;
+        private System.Windows.Forms.Button btnSave;
     }
 }
 

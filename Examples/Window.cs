@@ -19,9 +19,9 @@ namespace CodeFull.CarveSharp.Examples
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Mesh mesh = Mesh.LoadFromPLYFile(@"..\..\files\cube.ply");
-            viewport.Meshes.Add(mesh);
-            lstMeshes.Items.Add(mesh);
+            //Mesh mesh = Mesh.LoadFromPLYFile(@"..\..\files\cube.ply");
+            //viewport.Meshes.Add(mesh);
+            //lstMeshes.Items.Add(mesh);
 
             lblHelp.Text = "Click a mesh to select\n" +
                 "Pan = Left click\n" +
@@ -42,6 +42,7 @@ namespace CodeFull.CarveSharp.Examples
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.DefaultExt = ".ply";
             dlg.Filter = "PLY Meshes (*.ply)|*.ply";
+            dlg.Multiselect = true;
 
             DialogResult result = dlg.ShowDialog();
 
@@ -67,14 +68,42 @@ namespace CodeFull.CarveSharp.Examples
             if (lstMeshes.Items.Count < 2)
                 return;
 
-            Mesh first = lstMeshes.Items[1] as Mesh;
-            Mesh second = lstMeshes.Items[0] as Mesh;
+            Mesh first = lstMeshes.Items[0] as Mesh;
+            Mesh second = lstMeshes.Items[1] as Mesh;
 
-            Mesh result = CarveSharp.PerformCSG(first, second, CarveSharp.CSGOperations.Intersection);
+            Mesh result = CarveSharp.PerformCSG(first, second, CarveSharp.CSGOperations.AMinusB);
+            
+            if (result == null)
+            {
+                MessageBox.Show("The resulting mesh was empty");
+                return;
+            }
+
+            result.SaveMesh("googoori.ply");
+
             result.ID = "Minus-mesh";
 
             viewport.Meshes.Add(result);
             lstMeshes.Items.Add(result);
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (lstMeshes.SelectedItem == null)
+                return;
+
+            Mesh mesh = lstMeshes.SelectedItem as Mesh;
+
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.DefaultExt = ".ply";
+            dlg.Filter = "PLY Meshes (*.ply)|*.ply";
+
+            DialogResult result = dlg.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                mesh.SaveMesh(dlg.FileName);
+            }
         }
     }
 }
