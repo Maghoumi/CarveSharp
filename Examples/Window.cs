@@ -79,9 +79,9 @@ namespace CodeFull.CarveSharp.Examples
                 return;
             }
 
-            result.SaveMesh("googoori.ply");
+            MessageBox.Show("Done!");
 
-            result.ID = "Minus-mesh";
+            result.ID = "result-mesh";
 
             viewport.Meshes.Add(result);
             lstMeshes.Items.Add(result);

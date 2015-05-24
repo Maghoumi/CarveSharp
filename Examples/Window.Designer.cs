@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.viewport = new Controls.GLViewport3D();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCut = new System.Windows.Forms.Button();
@@ -35,10 +36,12 @@
             this.button1 = new System.Windows.Forms.Button();
             this.lstMeshes = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.viewport = new CodeFull.Controls.GLViewport3D();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
+            //
+            // viewport
+            //
+            this.viewport.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // groupBox1
             // 
@@ -111,29 +114,13 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.viewport);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(639, 537);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "OpenGL";
-            // 
-            // viewport
-            // 
-            this.viewport.ArcballSensitivity = 0.01D;
-            this.viewport.BackColor = System.Drawing.Color.Black;
-            this.viewport.ClearColor = System.Drawing.Color.White;
-            this.viewport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.viewport.FarClipping = 64D;
-            this.viewport.FieldOfView = 45D;
-            this.viewport.Location = new System.Drawing.Point(3, 16);
-            this.viewport.Name = "viewport";
-            this.viewport.NearClipping = 0.1D;
-            this.viewport.Size = new System.Drawing.Size(633, 518);
-            this.viewport.TabIndex = 0;
-            this.viewport.VSync = false;
-            this.viewport.SelectionChanged += new System.EventHandler(this.viewport_SelectionChanged);
+            this.groupBox2.Controls.Add(this.viewport);
             // 
             // Window
             // 
@@ -146,7 +133,6 @@
             this.Text = "Example";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

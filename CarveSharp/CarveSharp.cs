@@ -19,8 +19,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using CodeFull.Graphics;
 using OpenTK;
+using System.Collections.Concurrent;
 
 namespace CodeFull.CarveSharp
 {
@@ -140,16 +142,79 @@ namespace CodeFull.CarveSharp
                 Vector3d[] vertices = new Vector3d[result->vertsArrayLength / 3];
                 int[] triangleIndices = new int[result->triArrayLength];
 
-                // TODO use parallel copy?
-                for (int i = 0; i < vertices.Length; i++)
-                    vertices[i] = new Vector3d(result->vertices[3*i], result->vertices[3*i+1], result->vertices[3*i+2]);
+                // Copy the results back in parallel
+                Parallel.For(0, vertices.Length, i =>
+                {
+                    vertices[i] = new Vector3d(result->vertices[3 * i], result->vertices[3 * i + 1], result->vertices[3 * i + 2]);
+                });
 
-                for (int i = 0; i < result->triArrayLength; i++)
+                Parallel.For(0, triangleIndices.Length, i =>
+                {
                     triangleIndices[i] = result->triangleIndices[i];
+                });
 
-                finalResult = new Mesh(vertices, triangleIndices);
+                // If none of the vertices had colors, return whatever we have
+                if (!first.HasColor && !second.HasColor)
+                {
+                    finalResult = new Mesh(vertices, triangleIndices);
+                    freeMesh(result);
+                }
+                else    // Assign colors to the resulting mesh
+                {
+                    uint[] colors = new uint[vertices.Length];
+                    uint grayCode = 4286611584; // The uint value of the color gray (representing no color)
 
-                freeMesh(result);
+                    // Assign the default gray to all vertices
+                    Parallel.For(0, colors.Length, i => 
+                    {
+                        colors[i] = grayCode;
+                    });
+
+                    #region Worst practices of parallel coding
+                    /**
+                     * The procedure for color matching is creating a map of (vertex=>color) and then
+                     * comparing all vertices of the resulting mesh (in parallel) with this map and
+                     * assigning colors as necessary
+                     */
+                    if (first.HasColor)
+                    {
+                        ConcurrentDictionary<Vector3d, uint> firstMap = new ConcurrentDictionary<Vector3d, uint>();
+                        var fVerts = first.GetTransformedVertices();
+
+                        // Create vertex to color map
+                        Parallel.For(0, fVerts.Length, i =>
+                        {
+                            firstMap[fVerts[i]] = first.Colors[i];
+                        });
+
+                        // Assign colors
+                        Parallel.For(0, vertices.Length, i =>
+                        {
+                            if (firstMap.ContainsKey(vertices[i]))
+                                colors[i] = firstMap[vertices[i]];
+                        });
+                    }
+
+                    if (second.HasColor)
+                    {
+                        ConcurrentDictionary<Vector3d, uint> secondMap = new ConcurrentDictionary<Vector3d, uint>();
+                        var sVerts = second.GetTransformedVertices();
+
+                        Parallel.For(0, sVerts.Length, i =>
+                        {
+                            secondMap[sVerts[i]] = second.Colors[i];
+                        });
+
+                        Parallel.For(0, vertices.Length, i =>
+                        {
+                            if (secondMap.ContainsKey(vertices[i]))
+                                colors[i] = secondMap[vertices[i]];
+                        });
+                    } 
+                    #endregion
+
+                    finalResult = new Mesh(vertices, triangleIndices, colors);
+                }
             }   // end-unsafe
 
             return finalResult;
