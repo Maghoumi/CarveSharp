@@ -14,4 +14,4 @@ The latest version of CarveSharp includes an example project. Simply run the exa
 ## Acknowledgement
 All credits go to the original developer of [Carve] (https://code.google.com/p/carve/).  
 Carve's fork [sybren-carve] (https://code.google.com/r/sybren-carve/) was used for building VS 2013 binaries.  
-CarveSharp depends on the [OpenTK] (http://www.opentk.org) and (CodeFullToolkit) [https://github.com/Maghoumi/CodeFullToolkit] libraries.
+CarveSharp depends on the [OpenTK] (http://www.opentk.org) and [CodeFullToolkit] (https://github.com/Maghoumi/CodeFullToolkit) libraries.
