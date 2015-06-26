@@ -34,7 +34,7 @@ namespace CodeFull.CarveSharp.Examples
             Mesh m = (lstMeshes.SelectedValue as Mesh);
 
             if (m != null)
-                viewport.SelectedMesh = (Mesh)lstMeshes.SelectedValue;
+                viewport.SelectedDrawable = (Mesh)lstMeshes.SelectedValue;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -51,7 +51,7 @@ namespace CodeFull.CarveSharp.Examples
                 foreach (var item in dlg.FileNames)
                 {
                     Mesh m = Mesh.LoadFromPLYFile(item);
-                    viewport.Meshes.Add(m);
+                    viewport.Children.Add(m);
                     lstMeshes.Items.Add(m);
                 }
             }
@@ -59,8 +59,8 @@ namespace CodeFull.CarveSharp.Examples
 
         private void viewport_SelectionChanged(object sender, EventArgs e)
         {
-            if (null != viewport.SelectedMesh)
-                this.lstMeshes.SelectedItem = viewport.SelectedMesh;
+            if (null != viewport.SelectedDrawable)
+                this.lstMeshes.SelectedItem = viewport.SelectedDrawable;
         }
 
         private void btnCut_Click(object sender, EventArgs e)
@@ -83,7 +83,7 @@ namespace CodeFull.CarveSharp.Examples
 
             result.ID = "result-mesh";
 
-            viewport.Meshes.Add(result);
+            viewport.Children.Add(result);
             lstMeshes.Items.Add(result);
         }
 
