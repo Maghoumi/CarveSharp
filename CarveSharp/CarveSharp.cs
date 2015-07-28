@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using CodeFull.Graphics;
 using OpenTK;
 using System.Collections.Concurrent;
+using CodeFull.Graphics3D;
 
 namespace CodeFull.CarveSharp
 {
@@ -37,12 +38,35 @@ namespace CodeFull.CarveSharp
         /// </summary>
         public enum CSGOperations
         {
-            Union,                  /** in a or b. */
-            Intersection,           /** in a and b. */
-            AMinusB,              /** in a, but not b. */
-            BMinusA,              /** in b, but not a. */
-            SymmetricDifferent,   /** in a or b, but not both. */
-            All                     /** all split faces from a and b */
+            /// <summary>
+            /// In A or in B.
+            /// </summary>
+            Union,
+
+            /// <summary>
+            /// In A and in B.
+            /// </summary>
+            Intersection,
+
+            /// <summary>
+            /// In A, but not in B.
+            /// </summary>
+            AMinusB,
+
+            /// <summary>
+            /// In B, but not in A.
+            /// </summary>
+            BMinusA,
+
+            /// <summary>
+            /// In A or B, but not in both.
+            /// </summary>
+            SymmetricDifferent,
+
+            /// <summary>
+            /// All split faces from A and B.
+            /// </summary>
+            All
         }
 
         /// <summary>
