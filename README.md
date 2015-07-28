@@ -10,8 +10,15 @@ Build the solution using the desired configuration (Debug/Release). Binary files
 
 ## Included Example
 The latest version of CarveSharp includes an example project. Simply run the example project, load two meshes and experiment with them.
+Here's an example output screenshot:  
+
+Before:
+![Screenshot of an example](https://www.maghoumi.com/Images/CarveSharp/2.png)
+
+After:
+![Screenshot of an example](https://www.maghoumi.com/Images/CarveSharp/4.png)
 
 ## Acknowledgement
-All credits go to the original developer of [Carve] (https://code.google.com/p/carve/).  
+All credits go to the original developer of [Carve] (https://code.google.com/p/carve/).    
 Carve's fork [sybren-carve] (https://code.google.com/r/sybren-carve/) was used for building VS 2013 binaries.  
 CarveSharp depends on the [OpenTK] (http://www.opentk.org) and [CodeFullToolkit] (https://github.com/Maghoumi/CodeFullToolkit) libraries.
