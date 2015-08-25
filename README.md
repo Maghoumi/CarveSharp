@@ -13,10 +13,10 @@ The latest version of CarveSharp includes an example project. Simply run the exa
 Here's an example output screenshot:  
 
 Before:
-![Screenshot of an example](https://www.maghoumi.com/Images/CarveSharp/2.png)
+![Screenshot of an example](https://www.maghoumi.com/wp-content/uploads/2015/08/2.png)
 
 After:
-![Screenshot of an example](https://www.maghoumi.com/Images/CarveSharp/4.png)
+![Screenshot of an example](https://www.maghoumi.com/wp-content/uploads/2015/08/4.png)
 
 ## Acknowledgement
 All credits go to the original developer of [Carve] (https://code.google.com/p/carve/).    
